@@ -1,12 +1,14 @@
 import re
 
-from . import AMOUNT_PATTERN
-from . import TOKEN_PATTERN
-from . import SNAP_BEGINNING
-from . import SNAP_ENDING
-from . import SNAP_PATTERN
+from . import SNAP_ENDING, SNAP_BEGINNING
 
 from .exceptions import InvalidTokenException
+
+AMOUNT_PATTERN = r'(?P<sign>[+\-])(?P<amount>\d+)?(?P<unit>[smhdwM])?'
+SNAP_PATTERN = r'(?P<snap_to>[\/@])(?P<snap_unit>[smhdwM]|bw)'
+TOKEN_PATTERN = (
+    r"^now(?:([+\-])(?:(\d+)?([smhdwM])))*(?:[@\/]([smhdwM]|(?:bw)))?$"
+)
 
 
 def token_to_dict(token):

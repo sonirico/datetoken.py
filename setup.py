@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from setuptools import setup
 
-with io.open('README.md', 'rt', encoding='utf8') as f:
+with io.open('README.rst', 'rt', encoding='utf8') as f:
     readme = f.read()
 
 with io.open('datetoken/__init__.py', 'rt', encoding='utf8') as f:
@@ -13,13 +13,12 @@ with io.open('datetoken/__init__.py', 'rt', encoding='utf8') as f:
 setup(
     name='datetoken',
     version=version,
-    url='https://',
+    url='https://pypi.org/project/datetoken/',
     project_urls=OrderedDict((
-        ('Documentation', 'TODO'),
         ('Code', 'https://github.com/sonirico/datetoken/'),
         ('Issue tracker', 'https://github.com/sonirico/datetoken/issues'),
     )),
-    license='BSD',
+    license='MIT',
     author='Marcos Sanchez',
     author_email='marsanben92@gmail.com',
     maintainer='Marcos Sanchez',
