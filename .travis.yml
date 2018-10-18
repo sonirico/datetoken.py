@@ -1,0 +1,21 @@
+os: linux
+sudo: false
+language: python
+python:
+  - "2.7"
+  - "3.6"
+
+branches:
+  only:
+  - master
+
+install:
+  - pip install tox-travis
+
+script:
+  - tox
+
+cache:
+  - pip
+
+

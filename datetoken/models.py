@@ -3,8 +3,7 @@ from abc import abstractproperty  # In P3 properties and abstract methods can
 # be nested
 
 from . import NOW
-from . import get_utc_now
-from . import TokenOperations
+from .__operations__ import TokenOperations, get_utc_now
 
 
 class Token(object):

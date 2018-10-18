@@ -15,11 +15,10 @@ setup(
     version=version,
     url='https://',
     project_urls=OrderedDict((
-        ('Documentation', 'TODO'),
         ('Code', 'https://github.com/sonirico/datetoken/'),
         ('Issue tracker', 'https://github.com/sonirico/datetoken/issues'),
     )),
-    license='BSD',
+    license='MIT',
     author='Marcos Sanchez',
     author_email='marsanben92@gmail.com',
     maintainer='Marcos Sanchez',
