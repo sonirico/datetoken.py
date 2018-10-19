@@ -23,10 +23,11 @@ As you may have noticed, token follow a pattern:
 - The word `now`. It means the point in the future timeline when tokens are
   parsed to their datetime form.
 - Optionally, modifiers to add and/or subtract the future value of `now` can 
-  be used. Surprisingly, additions are set via `+`, while `-` mean subtractions.
-  These modifiers can be chained as many times as needed. E.g: `now-1M+3d+2h`. 
-  Along with the arithmetical sign and the amount, the unit of time the amount
-  refers to must be specified. Currently, the supported units are:
+  be used. Unsurprisingly, additions are set via `+`, while `-` mean
+  subtractions. These modifiers can be chained as many times as needed. 
+  E.g: `now-1M+3d+2h`. Along with the arithmetical sign and the amount, the
+  unit of time the amount refers to must be specified. Currently, the supported
+  units are:
   - `s` seconds
   - `m` minutes
   - `h` hours
@@ -52,6 +53,16 @@ As you may have noticed, token follow a pattern:
 
 Install and update via either [pipenv](https://pipenv.readthedocs.io/en/latest/)
 or [pip](https://pip.pypa.io/en/stable/quickstart/)
+
+```shell
+pipenv install datetoken
+```
+
+or
+
+```shell
+pip install datetoken
+```
 
 ## Ok, get me to the code
 

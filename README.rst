@@ -23,7 +23,7 @@ As you may have noticed, token follow a pattern:
 -  The word ``now``. It means the point in the future timeline when
    tokens are parsed to their datetime form.
 -  Optionally, modifiers to add and/or subtract the future value of
-   ``now`` can be used. Surprisingly, additions are set via ``+``, while
+   ``now`` can be used. Unsurprisingly, additions are set via ``+``, while
    ``-`` mean subtractions. These modifiers can be chained as many times
    as needed. E.g: ``now-1M+3d+2h``. Along with the arithmetical sign
    and the amount, the unit of time the amount refers to must be
@@ -57,6 +57,16 @@ Installing
 
 Install and update via either `pipenv`_ or `pip`_
 
+.. code:: shell
+
+    pipenv install datetoken
+
+or
+
+.. code:: shell
+
+    pip install datetoken
+
 
 Examples and usage
 ------------------
@@ -74,12 +84,6 @@ Most probably you will be dealing with simple presets such as
    2018-10-17 00:00:00
    >>> simple_token_to_date('now-d@d')  # End of yesterday
    2018-10-17 23:59:59
-
-Simple tokens are defined as dates with zero or one modifiers. In case
-you disallow the usage of several modifiers, simple tokens will
-automatically read the first (if any) and discard the remaining ones.
-
-Howe
 
 .. _pipenv: https://pipenv.readthedocs.io/en/latest/
 .. _pip: https://pip.pypa.io/en/stable/quickstart/
