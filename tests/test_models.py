@@ -1,82 +1,44 @@
 import mock
 import unittest
 
-from datetoken import SNAP_ENDING
-from datetoken.models import ComplexToken
-from datetoken.models import SimpleToken
+
+from datetoken.exceptions import InvalidTokenException
+from datetoken.models import Token
 
 from .datetoken_testutils import NOW_MOCKED
 from .datetoken_testutils import get_test_date
 
 
-class SimpleTokenTestCase(unittest.TestCase):
-    def setUp(self):
-        self.default_token = SimpleToken()
-        self.full_token = SimpleToken(1, 'd', '+', snap_to=SNAP_ENDING,
-                                      snap_unit='h')
+@mock.patch('datetoken.ast.get_utc_now', return_value=NOW_MOCKED)
+class TokenModelTestCase(unittest.TestCase):
+    def test_from_string_now(self, *args):
+        token = Token.from_string('now')
 
-    def test_is_calculated_property(self):
-        self.assertTrue(self.full_token.is_calculated)
-        self.assertFalse(self.default_token.is_calculated)
+        self.assertFalse(token.is_calculated)
+        self.assertFalse(token.is_snapped)
+        self.assertEqual('now', str(token))
+        self.assertEqual(NOW_MOCKED, token.to_date())
 
-    def test_is_snapped_property(self):
-        self.assertTrue(self.full_token.is_snapped)
-        self.assertFalse(self.default_token.is_snapped)
+    def test_invalid_from_string_should_raise(self, *args):
+        self.assertRaises(InvalidTokenException, Token.from_string,
+                          'now-1Z/a')
 
-    def test_to_string_representation(self):
-        self.assertEqual('now', str(self.default_token))
-        self.assertEqual('now+1d@h', str(self.full_token))
+    def test_from_string_several_modifiers_are_parsed(self, *args):
+        token = Token.from_string('now-1d+2h/d')
+        self.assertEqual('now-1d+2h/d', str(token))
+        expected = get_test_date('2018-12-14 00:00:00')
+        self.assertEqual(expected, token.to_date())
 
-    @mock.patch('datetoken.models.get_utc_now',
-                return_value=NOW_MOCKED)
-    def test_default_to_date_representation(self, *args):
-        actual = self.default_token.to_date()
-        expected = NOW_MOCKED
-        self.assertEqual(expected, actual)
+    def test_from_string_several_values_must_be_interpreted(self, *args):
+        payload = 'now-1d+2h+1w/m'
+        token = Token.from_string(payload)
+        self.assertEqual(payload, str(token))
+        expected = get_test_date('2018-12-21 12:12:00')
+        self.assertEqual(expected, token.to_date())
 
-    @mock.patch('datetoken.models.get_utc_now',
-                return_value=NOW_MOCKED)
-    def test_full_token_to_date_representation(self, *args):
-        actual = self.full_token.to_date()
-        expected = get_test_date('2018-12-16 10:59:59')
-        self.assertEqual(expected, actual)
-
-
-class ComplexTokenTestCase(unittest.TestCase):
-    def test_default_token(self):
-        default_token = ComplexToken()
-        self.assertFalse(default_token.is_calculated)
-        self.assertFalse(default_token.is_snapped)
-        self.assertEqual('now', str(default_token))
-
-        with mock.patch('datetoken.models.get_utc_now',
-                        return_value=NOW_MOCKED):
-            self.assertEqual(NOW_MOCKED, default_token.to_date())
-
-    def test_complex_token_set_up(self):
-        token_mods = [
-            {
-                'amount': 3,
-                'unit': 'd',
-                'sign': '+'
-            },
-            {
-                'amount': 1,
-                'unit': 'M',
-                'sign': '-'
-            }
-        ]
-        token = ComplexToken(values=token_mods, snap_to=SNAP_ENDING,
-                             snap_unit='bw')
-        self.assertTrue(token.is_calculated)
-        self.assertTrue(token.is_snapped)
-        self.assertEqual('now+3d-1M@bw', str(token))
-
-        with mock.patch('datetoken.models.get_utc_now',
-                        return_value=NOW_MOCKED):
-            expected = get_test_date('2018-11-16 23:59:59')
-            self.assertEqual(expected, token.to_date())
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_now_token_is_optional(self, *args):
+        payload = '-1d+2h+1w/m'
+        token = Token.from_string(payload)
+        self.assertEqual('now' + payload, str(token))
+        expected = get_test_date('2018-12-21 12:12:00')
+        self.assertEqual(expected, token.to_date())

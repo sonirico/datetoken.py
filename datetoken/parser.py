@@ -1,67 +1,89 @@
-import re
-
-from . import SNAP_ENDING, SNAP_BEGINNING
-
-from .exceptions import InvalidTokenException
-
-AMOUNT_PATTERN = r'(?P<sign>[+\-])(?P<amount>\d+)?(?P<unit>[smhdwM])?'
-SNAP_PATTERN = r'(?P<snap_to>[\/@])(?P<snap_unit>[smhdwM]|bw)'
-TOKEN_PATTERN = (
-    r"^now(?:([+\-])(?:(\d+)?([smhdwM])))*(?:[@\/]([smhdwM]|(?:bw)))?$"
+from .ast import (
+    NowExpression,
+    ModifierExpression,
+    SnapExpression,
 )
+from .token import TokenType
+
+AMOUNT_MODIFIERS = ("s", "m", "h", "d", "w", "M")
+SNAP_MODIFIERS = ("s", "m", "h", "d", "w", "bw", "M")
 
 
-def token_to_dict(token):
-    """ Receives a string representation of a relative date and returns
-        a json like object, with the following structure
+class Parser(object):
+    def __init__(self, lexer):
+        self.lexer = lexer
+        self.errors = []
+        self.peek_token = None
+        self.current_token = None
 
-        {
-            "values": [
-                {
-                    "amount": 1,
-                    "unit": "h",
-                    "sign": "+"
-                },
-                ...
-            ],
-            "snap_to": "/",
-            "snap_unit": "bw"
-        }
+    def next_token(self):
+        self.current_token = self.peek_token
+        self.peek_token = self.lexer.next_token()
 
-    :param token: string representation of a token
-    :return: dict with parsed data
-    :rtype: dict
-    :raises: InvalidTokenException
-    """
+    def parse_expression(self):
+        tt = self.current_token.token_type
+        if TokenType.NOW == tt:
+            return self.parse_now_expression()
+        elif TokenType.PLUS == tt or TokenType.MINUS == tt:
+            return self.parse_modifier_expression()
+        elif TokenType.SLASH == tt or TokenType.AT == tt:
+            return self.parse_snap_expression()
+        elif TokenType.ILLEGAL == tt:
+            self.errors.append(
+                'Illegal operator: "%s"'
+                % self.current_token.token_literal
+            )
+            return None
+        return None
 
-    # First of all, perform a total validation
-    if re.search(TOKEN_PATTERN, token) is None:
-        raise InvalidTokenException(token)
+    def parse_now_expression(self):
+        return NowExpression()
 
-    result = {'values': [], 'snap_to': None, 'snap_unit': None}
+    def parse_modifier_expression(self):
+        operator = self.current_token.token_literal
+        self.next_token()
+        amount = 1
+        if self.current_token.token_type == TokenType.NUMBER:
+            amount = int(self.current_token.token_literal)
+            self.next_token()
+        if self.current_token.token_type == TokenType.MODIFIER:
+            modifier = self.current_token.token_literal
+            if modifier not in AMOUNT_MODIFIERS:
+                self.errors.append(
+                    'Expected modifier literal as any of "%s", got "%s"'
+                    % (AMOUNT_MODIFIERS, modifier)
+                )
+            return ModifierExpression(amount, modifier, operator)
+        else:
+            self.errors.append(
+                'Expected NUMBER or MODIFIER token type, got "%s"'
+                % self.current_token.token_type
+            )
 
-    # Look for amount modifiers
-    has_additions = '+' in token
-    has_subtractions = '-' in token
+    def parse_snap_expression(self):
+        operator = self.current_token.token_literal
+        self.next_token()
+        if self.current_token.token_type != TokenType.MODIFIER:
+            self.errors.append(
+                'Expected amount MODIFIER token type, got "%s"'
+                % self.current_token.token_type
+            )
+        modifier = self.current_token.token_literal
+        if modifier not in SNAP_MODIFIERS:
+            self.errors.append(
+                'Expected snap MODIFIER token type, got "%s", choices are "%s"'
+                % (modifier, str(SNAP_MODIFIERS))
+            )
+        return SnapExpression(modifier, operator)
 
-    if has_additions or has_subtractions:
-        result['values'] = [
-            {
-                'sign': match[0],
-                'amount': int((match[1] or 1)),  # The absence of amount
-                # defaults to 1
-                'unit': match[2]
-            }
-            for match in re.findall(AMOUNT_PATTERN, token)
-        ]
-
-    # Look for snaps
-    snapped_from = SNAP_BEGINNING in token
-    snapped_to = SNAP_ENDING in token
-
-    if snapped_from or snapped_to:
-        matches = re.search(SNAP_PATTERN, token).groupdict()
-        result['snap_to'] = matches['snap_to']
-        result['snap_unit'] = matches['snap_unit']
-
-    return result
+    def parse(self):
+        nodes = []
+        self.next_token()
+        self.next_token()
+        while self.current_token.token_type is not TokenType.END:
+            node = self.parse_expression()
+            if not node:
+                break
+            nodes.append(node)
+            self.next_token()
+        return nodes

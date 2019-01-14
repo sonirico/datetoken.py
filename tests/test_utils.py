@@ -2,15 +2,13 @@ import mock
 import unittest
 
 from datetoken.exceptions import InvalidTokenException
-from datetoken.utils import complex_token_to_date
 from datetoken.utils import token_to_date
-from datetoken.utils import simple_token_to_date
 
 from .datetoken_testutils import NOW_MOCKED
 from .datetoken_testutils import get_test_date
 
 
-@mock.patch('datetoken.utils.get_utc_now', return_value=NOW_MOCKED)
+@mock.patch('datetoken.ast.get_utc_now', return_value=NOW_MOCKED)
 class DateTokenParseToDateTestCase(unittest.TestCase):
     def test_default_token(self, *args):
         payload = 'now'
@@ -113,45 +111,23 @@ class DateTokenParseToDateTestCase(unittest.TestCase):
         expected = get_test_date('2018-12-31 23:59:59')
         self.assertEqual(expected, actual)
 
-
-class SimpleTokenToDateUtilTestCase(unittest.TestCase):
-    """ This test case should remain as simpler as possible since utils
-        only work as proxies for other functionality, tested already.
-    """
-    def test_invalid_string_should_raise(self):
-        self.assertRaises(InvalidTokenException, simple_token_to_date,
+    def test_invalid_string_should_raise(self, *args):
+        self.assertRaises(InvalidTokenException, token_to_date,
                           'then-1d/d')
-        self.assertRaises(InvalidTokenException, simple_token_to_date,
+        self.assertRaises(InvalidTokenException, token_to_date,
                           'now-1Z/d')
 
     def test_correct_token_should_pass(self, *args):
         payload = 'now/d'
+        actual = token_to_date(payload)
+        expected = get_test_date('2018-12-15 00:00:00')
+        self.assertEqual(expected, actual)
 
-        with mock.patch('datetoken.models.get_utc_now',
-                        return_value=NOW_MOCKED):
-            actual = simple_token_to_date(payload)
-            expected = get_test_date('2018-12-15 00:00:00')
-            self.assertEqual(expected, actual)
-
-
-class ComplexTokenToDateUtilTestCase(unittest.TestCase):
-    """ This test case should remain as simpler as possible since utils
-        only work as proxies for other functionality, tested already.
-    """
-    def test_invalid_string_should_raise(self):
-        self.assertRaises(InvalidTokenException, complex_token_to_date,
-                          'then-1d/d')
-        self.assertRaises(InvalidTokenException, complex_token_to_date,
-                          'now-1Z/d')
-
-    def test_complex_token(self):
+    def test_complex_token(self, *args):
         payload = 'now-M+d-h/d'
-
-        with mock.patch('datetoken.models.get_utc_now',
-                        return_value=NOW_MOCKED):
-            actual = simple_token_to_date(payload)
-            expected = get_test_date('2018-11-15 00:00:00')
-            self.assertEqual(expected, actual)
+        actual = token_to_date(payload)
+        expected = get_test_date('2018-11-16 00:00:00')
+        self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':
