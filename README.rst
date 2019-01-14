@@ -2,11 +2,12 @@ Project description
 -------------------
 
 This package aims to solve a set of needs present in applications where
-dates need to be represented in a relative fashion, like background
-periodic tasks, datetime range pickers… in a compact and stringified
-format. This enables the programmer to persist these tokens during the
-lifetime of a process or even longer, since calculations are performed
-in the moment of re-evaluation
+dates need to be represented in a relative fashion, like background periodic
+tasks, datetime range pickers... in a compact and stringified format. This
+enables the programmer to persist these tokens during the lifetime of a
+process or even longer, since calculations are performed in the moment of
+evaluation. Theses tokens are also useful when caching URLs as replacement
+of timestamps, which would break caching given their mutability nature.
 
 Some common examples of relative tokens:
 
@@ -17,6 +18,7 @@ Some common examples of relative tokens:
 -  Last business week: ``now-w/bw``, ``now-w@bw``
 -  This business week: ``now/bw``, ``now@bw``
 -  Last month: ``now-1M/M``, ``now-1M@M``
+-  Last month first business week: ``now-M/M+w/bw``, ``now-M/M+w@bw``
 
 As you may have noticed, token follow a pattern:
 
@@ -76,7 +78,7 @@ Most probably you will be dealing with simple presets such as
 
 .. code:: python
 
-   >>> from datetoken.utils import simple_token_to_date
+   >>> from datetoken.utils import token_to_date
    >>> from datetime import datetime
    >>> print(datetime.utcnow())
    2018-10-18 14:08:47
