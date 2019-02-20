@@ -21,7 +21,7 @@ class TestLexer(unittest.TestCase):
             self.assertEqual(actual_token.token_literal, exp_token_literal)
 
     def test_next_token(self):
-        token_input = 'now-1h/h@M+2w/bw-3s-49d/m'
+        token_input = 'now-1h/h@M+2w/bw+2d/mon-3s-49d/m'
         # token_input = 'now-1'
         expected = (
             (TokenType.NOW, 'now'),
@@ -37,6 +37,11 @@ class TestLexer(unittest.TestCase):
             (TokenType.MODIFIER, 'w'),
             (TokenType.SLASH, '/'),
             (TokenType.MODIFIER, 'bw'),
+            (TokenType.PLUS, '+'),
+            (TokenType.NUMBER, '2'),
+            (TokenType.MODIFIER, 'd'),
+            (TokenType.SLASH, '/'),
+            (TokenType.MODIFIER, 'mon'),
             (TokenType.MINUS, '-'),
             (TokenType.NUMBER, '3'),
             (TokenType.MODIFIER, 's'),
