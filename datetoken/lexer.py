@@ -42,7 +42,7 @@ class Lexer(object):
             tok = Token(TokenType.NOW, 'now')
         elif self.current_char.isdigit():
             return Token(TokenType.NUMBER, self.read_number())
-        elif self.current_char is '':
+        elif self.current_char == '':
             tok = Token(TokenType.END, '')
         elif self.current_char.isalpha():
             return Token(TokenType.MODIFIER, self.read_word())
