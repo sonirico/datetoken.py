@@ -222,6 +222,44 @@ class DateTokenParseToDateTestCase(unittest.TestCase, DatetokenComparatorMixin):
         self.compare_datetime(actual, datetime(2019, 2, 22, 23, 59, 59,
                                                tzinfo=pytz.UTC))
 
+    def test_token_snapped_to_previous_friday(self):
+        payload = 'now/fri'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 11, 25, 12, 55, 23,
+                                               tzinfo=pytz.UTC))
+
+    def test_token_snapped_to_previous_sunday(self):
+        payload = 'now/sun'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 11, 27, 12, 55, 23,
+                                               tzinfo=pytz.UTC))
+
+    def test_token_snapped_to_prev_monday_yields_today(self):
+        # Today is Monday. Therefore, should snap to today.
+        payload = 'now/mon'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 11, 28, 12, 55, 23,
+                                               tzinfo=pytz.UTC))
+
+    def test_token_snapped_to_following_friday(self):
+        payload = 'now@fri'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 12, 2, 12, 55, 23,
+                                               tzinfo=pytz.UTC))
+
+    def test_token_snapped_to_following_sunday(self):
+        payload = 'now@sun'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 12, 4, 12, 55, 23,
+                                               tzinfo=pytz.UTC))
+
+    def test_token_snapped_to_following_monday(self):
+        # Today is Saturday. Therefore, should snap to today.
+        payload = 'now@mon'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 11, 28, 12, 55, 23,
+                                               tzinfo=pytz.UTC))
+
     def test_token_snapped_to_ending_of_month(self):
         payload = 'now@M'
         actual = token_to_date(payload)
