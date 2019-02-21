@@ -260,6 +260,18 @@ class DateTokenParseToDateTestCase(unittest.TestCase, DatetokenComparatorMixin):
         self.compare_datetime(actual, datetime(2016, 11, 28, 12, 55, 23,
                                                tzinfo=pytz.UTC))
 
+    def test_day_of_week_token_can_be_combined_1(self):
+        payload = 'now@sun/d'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 12, 4, 0, 0, 0,
+                                               tzinfo=pytz.UTC))
+
+    def test_day_of_week_token_can_be_combined_2(self):
+        payload = 'now/sun@d'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 11, 27, 23, 59, 59,
+                                               tzinfo=pytz.UTC))
+
     def test_token_snapped_to_ending_of_month(self):
         payload = 'now@M'
         actual = token_to_date(payload)
