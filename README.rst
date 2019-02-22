@@ -63,10 +63,20 @@ As you may have noticed, token follow a pattern:
    -  ``/`` Snap the date to the start of the snapshot unit.
    -  ``@`` Snap the date to the end of the snapshot unit.
 
-   Snapshot units are the same as arithmetical modifiers, plus ``bw``,
-   meaning *business week*. With this, we achieve a simple way to define
-   canonical relative date ranges, such as *Today* or *Last month*. As
-   an example of the later:
+  Snapshot units are the same as arithmetical modifiers, plus the following
+  ones:
+
+  - ``bw``, business week
+  - ``mon``, Monday
+  - ``tue``, Tuesday
+  - ``wed``, Wednesday
+  - ``thu``, Thursday
+  - ``fri``, Friday
+  - ``sat``, Saturday
+  - ``sun``, Sunday
+
+  With this, we achieve a simple way to define canonical relative date ranges,
+  such as *Today* or *Last month*. As an example of the later:
 
    -  String representation: ``now-1M/M``, ``now-1M@M``
    -  Being today *15 Jan 2018*, the result range should be: *2018-01-01
