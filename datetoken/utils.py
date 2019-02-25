@@ -1,9 +1,12 @@
-from .models import Token
+from .evaluator import Datetoken
 
 
-def token_to_date(token):
+def token_to_date(token=None, **kwargs):
     """ Shortcut to rapidly get a datetime object from string tokens
-    :param token:
     :return: datetime.datetime
     """
-    return Token.from_string(token).to_date()
+    return Datetoken(token=token, **kwargs).to_date()
+
+
+def token_to_utc_date(token=None, **kwargs):
+    return Datetoken(token, **kwargs).to_utc_date()

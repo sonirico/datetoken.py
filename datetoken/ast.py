@@ -14,9 +14,12 @@ def get_utc_now():
     :rtype: datetime.datetime
     :return: Timezone aware datetime object in UTC
     """
-    return datetime.utcnow().replace(
-        tzinfo=pytz.UTC, microsecond=0
-    )
+    now = datetime.utcnow()
+    now = now.replace(microsecond=0)
+    now = pytz.UTC.localize(now)
+    if hasattr(pytz.UTC, 'normalize'):
+        now = pytz.UTC.normalize(now)
+    return now
 
 
 class Expression(object):
@@ -30,8 +33,13 @@ class Expression(object):
 
 
 class NowExpression(Expression):
-    def get_value(self, *args):
-        return get_utc_now()
+    """
+    Dummy expression used to represent the existence of the
+    optional part `now` within a token. Only returns back
+    whatever it gets, acting as an identity expression.
+    """
+    def get_value(self, value):
+        return value
 
     def __str__(self):
         return "now"
