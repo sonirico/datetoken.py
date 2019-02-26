@@ -1,10 +1,29 @@
-Project description
--------------------
+This package allows you to store complex relative dates in string tokens.
 
-This package aims to solve a set of needs present in applications where
-dates need to be represented in a relative fashion, like background periodic
-tasks, datetime range pickers... in a compact and stringified format. This
-enables the programmer to persist these tokens during the lifetime of a
+- **To define the initial/starting point in time** (typically written as `now`), to
+  work with dates in the past or in the future. Ideal to perform date
+  simulations.
+- **Time zone configuration**. Additionally to the starting point in time, TZs
+  can be provided to as to somehow abstract the user away from localizing
+  *datetimes* objects in their apps.
+
+  As a disclaimer, if the custom datetime specified as the starting point
+  (`now`'s value) is tz-unaware or naive, it will be treated as an UTC one.
+  Default `now`'s value also fallsback to `datetime.datetime.utcnow`, localized
+  to UTC.
+
+  Now, if a time zone is specified, the ``now``'s value will be coerced to that
+  TZ prior to applying both snap and modifier expressions. This is handy
+  to quickly resolve tokens given any point in time (either naive or aware), a
+  time zone and the datetoken itself.
+
+============
+Motivation
+============
+Have you ever needed to make an application where dates needed to be
+represented in a relative fashion, like background periodic
+tasks, datetime range pickers... in a compact and stringified format? This
+library enables you to persist these string tokens during the lifetime of a
 process or even longer, since calculations are performed in the moment of
 evaluation. Theses tokens are also useful when caching URLs as replacement
 of timestamps, which would break caching given their mutability nature.
@@ -82,11 +101,13 @@ Most probably you will be dealing with simple presets such as
    >>> from datetime import datetime
    >>> print(datetime.utcnow())
    2018-10-18 14:08:47
-   >>> simple_token_to_date('now-d/d')  # Start of yesterday
+   >>> token_to_date('now-d/d')  # Start of yesterday
    2018-10-17 00:00:00
-   >>> simple_token_to_date('now-d@d')  # End of yesterday
+   >>> token_to_date('now-d@d')  # End of yesterday
    2018-10-17 23:59:59
 
+For more details, refer to `README`_.
+
+.. _readme: https://github.com/sonirico/datetoken#datetoken--
 .. _pipenv: https://pipenv.readthedocs.io/en/latest/
 .. _pip: https://pip.pypa.io/en/stable/quickstart/
-

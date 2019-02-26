@@ -1,18 +1,40 @@
 # Datetoken [![Build Status](https://travis-ci.org/sonirico/datetoken.svg?branch=master)](https://travis-ci.org/sonirico/datetoken) [![PyPI versions](https://img.shields.io/badge/python-2.7%20|%203.6-blue.svg)](https://pypi.org/project/datetoken/)
 
+## Features
+
+TL;DR: This package allows you to store complex relative dates in string tokens.
+
+- To define the initial/starting point in time (typically written as `now`), to
+  work with dates in the past or in the future. Ideal to perform date
+  simulations.
+- Time zone configuration. Additionally to the starting point in time, TZs
+  can be provided to as to somehow abstract the user away from localizing
+  _datetimes_ objects in their apps.
+
+  As a disclaimer, if the custom datetime specified as the starting point
+  (`now`'s value) is tz-unaware or naive, it will be treated as an UTC one. 
+  Default `now`'s value also fallsback to `datetime.datetime.utcnow`, localized
+  to UTC. 
+  
+  Now, if a time zone is specified, the `now`s value will be coerced to that
+  TZ prior to applying both snap and modifier expressions. This is handy
+  to quickly resolve tokens given any point in time (either naive or aware), a
+  time zone and the datetoken itself.
+
+
 ## Motivation
 
-This package aims to solve a set of needs present in applications where
-dates need to be represented in a relative fashion, like background periodic
-tasks, datetime range pickers... in a compact and stringified format. This
-enables the programmer to persist these tokens during the lifetime of a
+Have you ever needed to make an application where dates needed to be
+represented in a relative fashion, like background periodic
+tasks, datetime range pickers... in a compact and stringified format? This
+library enables you to persist these string tokens during the lifetime of a
 process or even longer, since calculations are performed in the moment of
 evaluation. Theses tokens are also useful when caching URLs as replacement
 of timestamps, which would break caching given their mutability nature.
 
 Some common examples of relative tokens:
 
-|                                | From           | To            |
+| Presets                        | From           | To            |
 |--------------------------------|----------------|---------------|
 | Today                          | `now/d`        | `now`         |
 | Yesterday                      | `now-d/d`      | `now-d@d`     |
@@ -24,7 +46,7 @@ Some common examples of relative tokens:
 | Custom range                   | `now+w-2d/h`   | `now+2M-10h`  |
 | Last month first business week | `now-M/M+w/bw` | `now-M/+w@bw` |
 
-As you may have noticed, token follow a pattern:
+As you may have noticed, tokens follow a pattern:
 
 - The word `now`. It means the point in the future timeline when tokens are
   parsed to their datetime form.
@@ -70,6 +92,36 @@ or
 pip install datetoken
 ```
 
+## A glance into the API
+
+You can use either the _evaluator_ subpackage or the _utils_ one for quicker
+access to simpler/common usages.
+
+- `datetoken.evaluator.eval_datetoken`
+    - Arguments:
+        - token: `{string}` E.g: `now-w/w+2d+8h`
+        - kwargs:
+            - at: `{datetime.datetime}` custom starting point
+            - tz: `{str|pytz.timezone}` custom time zone
+    - Return:
+        - `datetoken.objects.Token`. Model for tokens. Provides meta information
+        such as AST nodes, and whether the token is snapped or has modifiers
+        applied
+- `datetoken.evaluator.Datetoken` Facade to build tokens on the fly. Supports
+   fluent programming too.
+- `datetoken.utils.token_to_date`: 
+    - Arguments:
+        - token: `{string}` E.g: `now-w/w+2d+8h`
+        - kwargs:
+            - at: `{datetime.datetime}` custom starting point
+            - tz: `{str|pytz.timezone}` custom time zone
+    - Return:
+        - `datetime.datetime`. Datetime object with the result of applying
+        token modifiers. Always returns aware tz objects.
+- `datetoken.utils.token_to_utc_date`: Same as `token_to_date` but coercing
+    the result to UTC.
+
+
 ## Examples
 
 Most probably you will be dealing with simple presets such as _yesterday_ or
@@ -92,14 +144,53 @@ provide the flexibility advanced users may need.
 ```python
 >>> from datetoken.utils import token_to_date
 >>> print(datetime.utcnow())
-2018-10-18 14:34:29
->>> token_to_date('now-M+3d+100m')  # Subtract 1 month, add 3 days and
-                                    # subract again 100 mintues
-2018-09-21 16:14:29
+2018-10-18 16:34:29+02:00
+>>> token_to_date('now-M/M+w/bw')  # Starting of first business week of previous
+                                   # month
+2018-09-03 00:00:00
 ```
+
+Fluent programming is also supported:
+
+```python
+>>> import pytz
+>>> from datetime import datetime
+>>> from datetoken.evaluator import Datetoken
+>>> then = datetime(2019, 1, 26, 12, 24, 23, tzinfo=pytz.UTC)
+>>> Datetoken().at(then).on('Europe/Madrid').for_token('now/d').to_date()
+datetime(2019, 1, 26, 0, 0, 0, tzinfo="<DstTzInfo 'Europe/Madrid' CET+1:00:00 STD>")
+```
+
+Retrieving dates in `UTC` is implemented too:
+
+```python
+>>> import pytz
+>>> from datetime import datetime
+>>> from datetoken.evaluator import Datetoken
+>>> then = datetime(2019, 1, 26, 12, 24, 23, tzinfo=pytz.UTC)
+>>> Datetoken().at(then).on('Europe/Madrid').for_token('now/d').to_utc_date()
+datetime(2019, 1, 25, 23, 0, 0, tzinfo="<UTC>")
+
+>>> from datetoken.utils import token_to_utc_date
+>>> then_in_madrid = datetime(2019, 1, 26, 12, 24, 23, tzinfo=pytz.timezone('Europe/Madrid'))
+>>> token_to_utc_date('now/d', at=then_in_madrid)
+datetime(2019, 1, 25, 23, 0, 0, tzinfo="<UTC>")
+```
+
+If you thought fluent programming is no longer fashionable:
+
+```python
+...
+>>> then = datetime(2019, 1, 26, 12, 24, 23, tzinfo=pytz.UTC)
+>>> token = Datetoken(at=then, tz='Europe/Madrid', token='now/d')
+>>> token.to_date()
+datetime(2019, 1, 26, 0, 0, 0, tzinfo="<DstTzInfo 'Europe/Madrid' CET+1:00:00 STD>")
+```
+
 
 ## Issues
 
 - Business week snapshots might not be reliable in timezones where weeks
-  start in days other than Monday
+  start in days other than Monday or week duration lasts fewer or greater than
+  five days
 
