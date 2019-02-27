@@ -22,7 +22,7 @@ class Token(object):
         :return: Whether the token has been snapped, either to the beginning
             or end.
         """
-        return any([isinstance(node, SnapExpression) for node in self._nodes])
+        return any((isinstance(node, SnapExpression) for node in self._nodes))
 
     @property
     def is_calculated(self):
@@ -32,7 +32,7 @@ class Token(object):
             additions or subtractions.
         """
         return any(
-            [isinstance(node, ModifierExpression) for node in self._nodes])
+            (isinstance(node, ModifierExpression) for node in self._nodes))
 
     def refresh_at(self, new_at=None):
         self._at = new_at or get_utc_now()
