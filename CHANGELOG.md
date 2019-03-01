@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.1 - 2019-03-01]
+- Fixed `token_to_utc_date` not reading `token` keyword argument
+
 ## [0.3.0 - 2019-02-26]
 - Refactored testing suite to replace `mock` with
   `freezegun` as it is more convenient to work

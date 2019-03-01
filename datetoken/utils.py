@@ -9,4 +9,12 @@ def token_to_date(token=None, **kwargs):
 
 
 def token_to_utc_date(token=None, **kwargs):
-    return Datetoken(token, **kwargs).to_utc_date()
+    """
+    Quickly evaluate a token and coerce it back to UTC
+    :param token: string payload
+    :param kwargs:
+        - at: datetime.datetime
+        - tz: string or pytz.timezone
+    :return:
+    """
+    return Datetoken(token=token, **kwargs).to_utc_date()
