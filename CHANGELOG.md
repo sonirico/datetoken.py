@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.2 - 2019-10-06]
+- Updated dependencies:
+    - pytz
+    - freeegun
+    - python-dateutil
+
 ## [0.3.1 - 2019-03-01]
 - Fixed `token_to_utc_date` not reading `token` keyword argument
 
