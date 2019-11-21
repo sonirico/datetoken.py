@@ -100,6 +100,27 @@ class SnapExpression(Expression):
             "bw": lambda dt: (
                 dt - td(days=dt.weekday())
             ).replace(hour=0, minute=0, second=0),
+            "mon": lambda dt: (
+                dt - td(days=dt.weekday())
+            ),
+            "tue": lambda dt: (
+                dt - td(days=((dt.weekday() - 1) % 7))
+            ),
+            "wed": lambda dt: (
+                dt - td(days=((dt.weekday() - 2) % 7))
+            ),
+            "thu": lambda dt: (
+                dt - td(days=((dt.weekday() - 3) % 7))
+            ),
+            "fri": lambda dt: (
+                dt - td(days=((dt.weekday() - 4) % 7))
+            ),
+            "sat": lambda dt: (
+                dt - td(days=((dt.weekday() - 5) % 7))
+            ),
+            "sun": lambda dt: (
+                dt - td(days=((dt.weekday() - 6) % 7))
+            ),
         },
         TokenType.AT: {
             "s": lambda dt: dt.replace(
@@ -121,6 +142,27 @@ class SnapExpression(Expression):
             "bw": lambda dt: (
                 dt - td(days=dt.weekday()) + td(days=4)
             ).replace(hour=23, minute=59, second=59),
+            "mon": lambda dt: (
+                dt + td(days=((0 - dt.weekday()) % 7))
+            ),
+            "tue": lambda dt: (
+                dt + td(days=((1 - dt.weekday()) % 7))
+            ),
+            "wed": lambda dt: (
+                dt + td(days=((2 - dt.weekday()) % 7))
+            ),
+            "thu": lambda dt: (
+                dt + td(days=((3 - dt.weekday()) % 7))
+            ),
+            "fri": lambda dt: (
+                dt + td(days=((4 - dt.weekday()) % 7))
+            ),
+            "sat": lambda dt: (
+                dt + td(days=((5 - dt.weekday()) % 7))
+            ),
+            "sun": lambda dt: (
+                dt + td(days=((6 - dt.weekday()) % 7))
+            ),
         },
     }
 

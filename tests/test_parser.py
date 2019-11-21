@@ -23,18 +23,22 @@ class ParserExpression(unittest.TestCase):
                 self.assertEqual(node.modifier, exp[2])
 
     def test_parse_expression(self):
-        lexer = Lexer("now-1h+w+2M/d-2s@m")
+        lexer = Lexer("now-1h+w+2M/d+2d/thu-2s@m-5w@mon")
         parser = Parser(lexer)
         nodes = parser.parse()
-        self.assertEqual(7, len(nodes))
+        self.assertEqual(11, len(nodes))
         expected = (
             (NowExpression, []),
             (ModifierExpression, 1, "h", "-"),
             (ModifierExpression, 1, "w", "+"),
             (ModifierExpression, 2, "M", "+"),
             (SnapExpression, TokenType.SLASH, "d"),
+            (ModifierExpression, 2, "d", "+"),
+            (SnapExpression, TokenType.SLASH, "thu"),
             (ModifierExpression, 2, "s", "-"),
             (SnapExpression, TokenType.AT, "m"),
+            (ModifierExpression, 5, "w", "-"),
+            (SnapExpression, TokenType.AT, "mon"),
         )
         self.check_expected_nodes(nodes, expected)
 
