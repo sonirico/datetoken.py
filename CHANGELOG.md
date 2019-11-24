@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.0 - 2019-11-24]
+- Feature day of week snappers
+- Dependency upgrades:
+   - pytz >= 2018.04 < 2019.04
+   - python-dateutil >= 2.7.3 < 2.8.2
+
 ## [0.3.2 - 2019-10-06]
 - Updated dependencies:
     - pytz
