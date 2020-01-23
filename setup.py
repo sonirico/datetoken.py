@@ -37,7 +37,7 @@ setup(
     extras_require={
         'dev': [
             'pytest>=3',
-            'freezegun==0.3.13',
+            'freezegun==0.3.14',
             'coverage',
             'tox',
         ],
