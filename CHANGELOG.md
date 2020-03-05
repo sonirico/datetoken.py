@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.1 - 2020-03-06]
+
+### Changed
+
+- Updated depedencies
+
+### Fixed
+
+- Deprecation warnings from the usage of 'collections.Sequence'.
+
 ## [0.4.0 - 2019-11-24]
 - Feature day of week snappers
 - Dependency upgrades:
