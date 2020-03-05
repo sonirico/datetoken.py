@@ -1,8 +1,8 @@
 # Datetoken
 
-[![Build Status](https://travis-ci.org/sonirico/datetoken.svg?branch=master&style=flat-square)](https://travis-ci.org/sonirico/datetoken)
-[![PyPI versions](https://img.shields.io/pypi/v/datetoken?style=flat-square)](https://pypi.org/project/datetoken/)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sonirico/datetoken)](https://dependabot.com)
+[![Build Status](https://travis-ci.org/sonirico/datetoken.py.svg?branch=master&style=flat-square)](https://travis-ci.org/sonirico/datetoken.py)
+[![PyPI versions](https://img.shields.io/pypi/v/datetoken.py?style=flat-square)](https://pypi.org/project/datetoken.py/)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sonirico/datetoken.py)](https://dependabot.com)
 
 ## Features
 
@@ -18,8 +18,8 @@ TL;DR: This package allows you to store complex relative dates in string tokens.
   As a disclaimer, if the custom datetime specified as the starting point
   (`now`'s value) is tz-unaware or naive, it will be treated as an UTC one. 
   Default `now`'s value also fallsback to `datetime.datetime.utcnow`, localized
-  to UTC. 
-  
+  to UTC.
+
   Now, if a time zone is specified, the `now`s value will be coerced to that
   TZ prior to applying both snap and modifier expressions. This is handy
   to quickly resolve tokens given any point in time (either naive or aware), a
