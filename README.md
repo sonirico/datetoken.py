@@ -1,4 +1,8 @@
-# Datetoken [![Build Status](https://travis-ci.org/sonirico/datetoken.svg?branch=master)](https://travis-ci.org/sonirico/datetoken) [![PyPI versions](https://img.shields.io/badge/python-2.7%20|%203.6-blue.svg)](https://pypi.org/project/datetoken/)
+# Datetoken
+
+[![Build Status](https://travis-ci.org/sonirico/datetoken.svg?branch=master&style=flat-square)](https://travis-ci.org/sonirico/datetoken)
+[![PyPI versions](https://img.shields.io/pypi/v/datetoken?style=flat-square)](https://pypi.org/project/datetoken/)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=sonirico/datetoken)](https://dependabot.com)
 
 ## Features
 
