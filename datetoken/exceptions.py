@@ -1,4 +1,8 @@
-from collections import Sequence
+try:
+    # Python3.3 and above
+    from collections.abc import Sequence
+except ImportError:
+    from collections import Sequence
 
 
 class InvalidTokenException(Exception):
