@@ -5,10 +5,12 @@ python:
   - "2.7"
   - "3.6"
   - "3.7"
+  - "3.8"
 
 branches:
   only:
   - master
+  - /^test/.*$/
 
 install:
   - pip install tox-travis
