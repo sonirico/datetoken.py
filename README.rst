@@ -37,6 +37,7 @@ Some common examples of relative tokens:
 -  Last business week: ``now-w/bw``, ``now-w@bw``
 -  This business week: ``now/bw``, ``now@bw``
 -  Last month: ``now-1M/M``, ``now-1M@M``
+-  Last year: ``now-1Y/Y``, ``now-1Y@Y``
 -  Last month first business week: ``now-M/M+w/bw``, ``now-M/M+w@bw``
 
 As you may have noticed, token follow a pattern:
@@ -56,6 +57,7 @@ As you may have noticed, token follow a pattern:
    -  ``d`` days
    -  ``w`` weeks
    -  ``M`` months
+   -  ``Y`` years
 
 -  Optionally, there exist two extra modifiers to snap dates to the
    start or the end of any given snapshot unit. Those are:

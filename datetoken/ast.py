@@ -54,6 +54,7 @@ class ModifierExpression(Expression):
             "d": lambda dt, amount: dt + td(days=amount),
             "w": lambda dt, amount: dt + td(weeks=amount),
             "M": lambda dt, amount: dt + relativedelta(months=amount),
+            "Y": lambda dt, amount: dt + relativedelta(years=amount),
         },
         TokenType.MINUS: {
             "s": lambda dt, amount: dt - td(seconds=amount),
@@ -62,6 +63,7 @@ class ModifierExpression(Expression):
             "d": lambda dt, amount: dt - td(days=amount),
             "w": lambda dt, amount: dt - td(weeks=amount),
             "M": lambda dt, amount: dt - relativedelta(months=amount),
+            "Y": lambda dt, amount: dt - relativedelta(years=amount),
         },
     }
 
@@ -96,6 +98,9 @@ class SnapExpression(Expression):
             ).replace(hour=0, minute=0, second=0),
             "M": lambda dt: dt.replace(
                 day=1, hour=0, minute=0, second=0
+            ),
+            "Y": lambda dt: dt.replace(
+                month=1, day=1, hour=0, minute=0, second=0
             ),
             "bw": lambda dt: (
                 dt - td(days=dt.weekday())
@@ -139,6 +144,10 @@ class SnapExpression(Expression):
             "M": lambda dt: (
                 dt + relativedelta(months=1, days=-dt.day)
             ).replace(hour=23, minute=59, second=59),
+            "Y": lambda dt: dt.replace(
+                year=dt.year + 1, month=1, day=1,
+                hour=0, minute=0, second=0,
+            ) - relativedelta(seconds=1),
             "bw": lambda dt: (
                 dt - td(days=dt.weekday()) + td(days=4)
             ).replace(hour=23, minute=59, second=59),

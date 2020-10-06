@@ -5,8 +5,8 @@ from .ast import (
 )
 from .token import TokenType
 
-AMOUNT_MODIFIERS = ("s", "m", "h", "d", "w", "M")
-SNAP_MODIFIERS = ("s", "m", "h", "d", "w", "bw", "M",
+AMOUNT_MODIFIERS = ("s", "m", "h", "d", "w", "M", "Y")
+SNAP_MODIFIERS = ("s", "m", "h", "d", "w", "bw", "M", "Y",
                   "mon", "tue", "wed", "thu", "fri", "sat", "sun")
 
 
