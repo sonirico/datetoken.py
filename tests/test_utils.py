@@ -68,6 +68,13 @@ class DateTokenToUTCDateTestCase(unittest.TestCase, DatetokenComparatorMixin):
                                                tzinfo=pytz.UTC))
 
     @freeze_time(datetime(2019, 2, 20, 15, 45, 12))
+    def test_token_snapped_to_beginning_of_year(self):
+        payload = 'now/Y'
+        actual = token_to_utc_date(payload, tz='Europe/Madrid')
+        self.compare_datetime(actual, datetime(2018, 12, 31, 23, 0, 0,
+                                               tzinfo=pytz.UTC))
+
+    @freeze_time(datetime(2019, 2, 20, 15, 45, 12))
     def test_token_snapped_to_beginning_of_business_week(self):
         # TODO: bw is a highly relative concept ;)
         payload = 'now/bw'
@@ -129,6 +136,28 @@ class DateTokenToUTCDateTestCase(unittest.TestCase, DatetokenComparatorMixin):
         self.compare_datetime(actual, datetime(2019, 1, 31, 22, 59, 59,
                                                tzinfo=pytz.UTC))
 
+    def test_token_snapped_to_ending_of_year(self):
+        payload = 'now@Y'
+        actual = token_to_utc_date(payload, tz='Europe/Madrid')
+        self.compare_datetime(actual, datetime(2016, 12, 31, 22, 59, 59,
+                                               tzinfo=pytz.UTC))
+
+    @freeze_time(datetime(2018, 1, 1, 0, 0, 0))
+    def test_token_snapped_to_ending_of_year_edge_case_1(self):
+        # Snap `now` to the beginning of the year
+        payload = 'now@Y'
+        actual = token_to_utc_date(payload, tz='Europe/Madrid')
+        self.compare_datetime(actual, datetime(2018, 12, 31, 22, 59, 59,
+                                               tzinfo=pytz.UTC))
+
+    @freeze_time(datetime(2018, 12, 31, 23, 59, 59))
+    def test_token_snapped_to_ending_of_year_edge_case_2(self):
+        # Snap `now` to the ending of the year
+        payload = 'now@Y'
+        actual = token_to_utc_date(payload, tz='Europe/Madrid')
+        self.compare_datetime(actual, datetime(2019, 12, 31, 22, 59, 59,
+                                               tzinfo=pytz.UTC))
+
     def test_invalid_string_should_raise(self):
         self.assertRaises(InvalidTokenException, token_to_utc_date,
                           'then-1d/d')
@@ -180,6 +209,13 @@ class DateTokenParseToDateTestCase(unittest.TestCase, DatetokenComparatorMixin):
         payload = 'now/M'
         actual = token_to_date(payload)
         self.compare_datetime(actual, datetime(2019, 2, 1, 0, 0, 0,
+                                               tzinfo=pytz.UTC))
+
+    @freeze_time(datetime(2019, 2, 20, 15, 45, 12))
+    def test_token_snapped_to_beginning_of_year(self):
+        payload = 'now/Y'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2019, 1, 1, 0, 0, 0,
                                                tzinfo=pytz.UTC))
 
     @freeze_time(datetime(2019, 2, 20, 15, 45, 12))
@@ -290,6 +326,28 @@ class DateTokenParseToDateTestCase(unittest.TestCase, DatetokenComparatorMixin):
     def test_token_snapped_to_ending_of_month_edge_case_2(self):
         # Snap `now` to the beginning of the month
         payload = 'now@M'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2018, 12, 31, 23, 59, 59,
+                                               tzinfo=pytz.UTC))
+
+    def test_token_snapped_to_ending_of_year(self):
+        payload = 'now@Y'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2016, 12, 31, 23, 59, 59,
+                                               tzinfo=pytz.UTC))
+
+    @freeze_time(datetime(2018, 12, 1, 0, 0, 0))
+    def test_token_snapped_to_ending_of_year_edge_case_1(self):
+        # Snap `now` to the beginning of the year
+        payload = 'now@Y'
+        actual = token_to_date(payload)
+        self.compare_datetime(actual, datetime(2018, 12, 31, 23, 59, 59,
+                                               tzinfo=pytz.UTC))
+
+    @freeze_time(datetime(2018, 12, 31, 23, 59, 59))
+    def test_token_snapped_to_ending_of_year_edge_case_2(self):
+        # Snap `now` to the ending of the year
+        payload = 'now@Y'
         actual = token_to_date(payload)
         self.compare_datetime(actual, datetime(2018, 12, 31, 23, 59, 59,
                                                tzinfo=pytz.UTC))
