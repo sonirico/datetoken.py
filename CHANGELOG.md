@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+
+## [0.5.1 - 2020-10-12]
+
+### Added
+
+- Token 'Y' as both snap and modifier behaviours. By @Sighery
+
 ## [0.4.1 - 2020-03-06]
 
 ### Changed
