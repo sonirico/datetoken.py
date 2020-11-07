@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 
+## [0.5.2 - 2020-11-07]
+
+- Updated `pytz` dep from <2020.2,>=2018.04 to >=2018.04,<2020.5
+
 ## [0.5.1 - 2020-10-12]
 
 ### Added
