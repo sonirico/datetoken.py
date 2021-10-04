@@ -4,6 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 
+## [0.6.0 - 2021-10-05]
+
+- Feature: quarters
+- Chore: Updated `pytz` dep from <2020.2,>=2018.04 to >=2018.04,<2020.5
+- Chore: Updated `python-dateutil` dep from <2021.2,>=2018.04 to >=2018.04,<2021.4
+
 ## [0.5.2 - 2020-11-07]
 
 - Updated `pytz` dep from <2020.2,>=2018.04 to >=2018.04,<2020.5
