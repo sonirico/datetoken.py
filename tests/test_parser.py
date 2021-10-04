@@ -22,11 +22,10 @@ class ParserExpression(unittest.TestCase):
                 self.assertEqual(node.operator, exp[1])
                 self.assertEqual(node.modifier, exp[2])
 
-    def test_parse_expression(self):
-        lexer = Lexer("now-1h+w+2M/d+2d/thu-2s@m-5w@mon")
+    def test_parse_expression_base(self):
+        lexer = Lexer("now-1h+w+2M/d+2d/thu-2s@m-5w@mon/Q1/Q")
         parser = Parser(lexer)
         nodes = parser.parse()
-        self.assertEqual(11, len(nodes))
         expected = (
             (NowExpression, []),
             (ModifierExpression, 1, "h", "-"),
@@ -39,7 +38,10 @@ class ParserExpression(unittest.TestCase):
             (SnapExpression, TokenType.AT, "m"),
             (ModifierExpression, 5, "w", "-"),
             (SnapExpression, TokenType.AT, "mon"),
+            (SnapExpression, TokenType.SLASH, "Q1"),
+            (SnapExpression, TokenType.SLASH, "Q"),
         )
+        self.assertEqual(len(expected), len(nodes))
         self.check_expected_nodes(nodes, expected)
 
     def test_parse_expression_now_token_is_optional(self):
@@ -65,12 +67,12 @@ class ParserExpression(unittest.TestCase):
         self.assertIn('Illegal operator: "="', error)
 
     def test_parse_expression_catch_modified_literal_error(self):
-        lexer = Lexer("now-1h+wx2M/d-2s@m")
+        lexer = Lexer("now-1h+wxM/d-2s@m")
         parser = Parser(lexer)
         parser.parse()
         error = parser.errors[0]
-        self.assertIn('Expected modifier literal', error)
-        self.assertIn('got "wx"', error)
+        self.assertIn("Expected modifier literal", error)
+        self.assertIn('got "wxM"', error)
 
 
 class ParserNowExpression(unittest.TestCase):
@@ -80,7 +82,7 @@ class ParserNowExpression(unittest.TestCase):
         nodes = parser.parse()
         node = nodes[0]
         self.assertIsInstance(node, NowExpression)
-        self.assertEqual('now', str(node))
+        self.assertEqual("now", str(node))
 
 
 class ParserSnapExpression(unittest.TestCase):
@@ -89,7 +91,7 @@ class ParserSnapExpression(unittest.TestCase):
         parser = Parser(lexer)
         parser.parse()
         self.assertEqual(1, len(parser.errors))
-        self.assertIn('Expected snap MODIFIER token type', parser.errors[0])
+        self.assertIn("Expected snap MODIFIER token type", parser.errors[0])
 
     def test_snap_ending(self):
         lexer = Lexer("@M")
@@ -128,8 +130,8 @@ class ParserModifierExpression(unittest.TestCase):
         node = nodes[0]
         self.assertIsInstance(node, ModifierExpression)
         self.assertEqual(99, node.amount)
-        self.assertEqual('s', node.modifier)
-        self.assertEqual('-', node.operator)
+        self.assertEqual("s", node.modifier)
+        self.assertEqual("-", node.operator)
 
     def test_no_amount_defaults_to_1(self):
         lexer = Lexer("-m")
@@ -138,5 +140,5 @@ class ParserModifierExpression(unittest.TestCase):
         node = nodes[0]
         self.assertIsInstance(node, ModifierExpression)
         self.assertEqual(1, node.amount)
-        self.assertEqual('m', node.modifier)
-        self.assertEqual('-', node.operator)
+        self.assertEqual("m", node.modifier)
+        self.assertEqual("-", node.operator)
