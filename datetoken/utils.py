@@ -2,7 +2,7 @@ from .evaluator import Datetoken
 
 
 def token_to_date(token=None, **kwargs):
-    """ Shortcut to rapidly get a datetime object from string tokens
+    """Shortcut to rapidly get a datetime object from string tokens
     :return: datetime.datetime
     """
     return Datetoken(token=token, **kwargs).to_date()

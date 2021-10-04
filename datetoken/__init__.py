@@ -1,3 +1,3 @@
-__version__ = '0.5.2'
+__version__ = "0.5.2"
 
-DEFAULT_TOKEN = 'now'
+DEFAULT_TOKEN = "now"

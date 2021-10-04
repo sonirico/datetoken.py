@@ -33,10 +33,10 @@ def make_aware(datetime_obj, tz):
     :return:
     :raises: ValueError is datetime is already aware
     """
-    if hasattr(tz, 'localize'):
+    if hasattr(tz, "localize"):
         return tz.localize(datetime_obj)
     if is_aware(datetime_obj):
-        raise ValueError('Expected a naive datetime')
+        raise ValueError("Expected a naive datetime")
     return datetime_obj.replace(tzinfo=tz)
 
 
@@ -51,9 +51,9 @@ def localize(datetime_obj, tz):
         known
     """
     if is_naive(datetime_obj):
-        raise ValueError('Cannot localize naive datetime')
+        raise ValueError("Cannot localize naive datetime")
     localized = datetime_obj.astimezone(tz)
-    if hasattr(tz, 'normalize'):
+    if hasattr(tz, "normalize"):
         return tz.normalize(localized)
     return localized
 
@@ -83,8 +83,8 @@ def eval_datetoken(token, **kwargs):
         - tz: {str|pytz.timezone} a pytz object or their string repr.
     :return: datetoken.object structure that carries token meta-information
     """
-    now = kwargs.get('at') or get_utc_now()
-    tz_name = kwargs.get('tz')
+    now = kwargs.get("at") or get_utc_now()
+    tz_name = kwargs.get("tz")
     tz = pytz.timezone(tz_name) if isinstance(tz_name, six.string_types) else tz_name
     # Coerce tz unaware tokens to UTC as default behaviour
     if is_naive(now):

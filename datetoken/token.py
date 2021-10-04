@@ -1,16 +1,16 @@
 class TokenType(object):
-    END = ''
-    ILLEGAL = 'ILLEGAL'
+    END = ""
+    ILLEGAL = "ILLEGAL"
     # Operators
-    PLUS = '+'
-    MINUS = '-'
-    SLASH = '/'
-    AT = '@'
+    PLUS = "+"
+    MINUS = "-"
+    SLASH = "/"
+    AT = "@"
     # Identifiers
-    NUMBER = 'NUMBER'
-    MODIFIER = 'MODIFIER'
+    NUMBER = "NUMBER"
+    MODIFIER = "MODIFIER"
     # keywords
-    NOW = 'NOW'
+    NOW = "NOW"
 
 
 class Token(object):
