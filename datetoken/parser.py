@@ -6,8 +6,28 @@ from .ast import (
 from .token import TokenType
 
 AMOUNT_MODIFIERS = ("s", "m", "h", "d", "w", "M", "Y")
-SNAP_MODIFIERS = ("s", "m", "h", "d", "w", "bw", "M", "Y",
-                  "mon", "tue", "wed", "thu", "fri", "sat", "sun")
+SNAP_MODIFIERS = (
+    "s",
+    "m",
+    "h",
+    "d",
+    "w",
+    "bw",
+    "M",
+    "Y",
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun",
+    "Q",
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+)
 
 
 class Parser(object):
@@ -31,8 +51,7 @@ class Parser(object):
             return self.parse_snap_expression()
         elif TokenType.ILLEGAL == tt:
             self.errors.append(
-                'Illegal operator: "%s"'
-                % self.current_token.token_literal
+                'Illegal operator: "%s"' % self.current_token.token_literal
             )
             return None
         return None

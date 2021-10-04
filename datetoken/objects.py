@@ -31,8 +31,7 @@ class Token(object):
         :return: Whether the token is modified, meaning it suffers from
             additions or subtractions.
         """
-        return any(
-            (isinstance(node, ModifierExpression) for node in self._nodes))
+        return any((isinstance(node, ModifierExpression) for node in self._nodes))
 
     def refresh_at(self, new_at=None):
         self._at = new_at or get_utc_now()
@@ -47,8 +46,9 @@ class Token(object):
         value of `_at`
         :return:
         """
-        return reduce(lambda accumulated, node: node.get_value(accumulated),
-                      self._nodes, self._at)
+        return reduce(
+            lambda accumulated, node: node.get_value(accumulated), self._nodes, self._at
+        )
 
     def __str__(self):
-        return ''.join([str(node) for node in self._nodes])
+        return "".join([str(node) for node in self._nodes])
