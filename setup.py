@@ -34,7 +34,7 @@ setup(
     python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*',
     install_requires=[
         'pytz>=2018.04,<2021.4',
-        'python-dateutil>=2.7.3,<2.8.2'
+        'python-dateutil>=2.7.3,<2.8.3'
     ],
     extras_require={
         "dev": [
