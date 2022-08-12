@@ -33,7 +33,7 @@ setup(
     platforms='any',
     python_requires='>=3.6',
     install_requires=[
-        'pytz>=2018.04,<2021.4',
+        'pytz>=2018.04,<2022.3',
         'python-dateutil>=2.7.3,<2.8.3'
     ],
     extras_require={
